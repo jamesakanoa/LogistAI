@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogistAI Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>LogistAI Demo</h1>
+    
+    <h2>Demand Forecasting</h2>
+    <input type="number" id="historical_sales" placeholder="Historical Sales">
+    <input type="number" id="promotional_effect" placeholder="Promotional Effect">
+    <input type="number" id="economic_indicator" placeholder="Economic Indicator">
+    <button onclick="predictDemand()">Predict Demand</button>
+    <p id="demand_result"></p>
+
+    <h2>Customer Communication</h2>
+    <input type="text" id="customer_text" placeholder="Enter customer message">
+    <button onclick="predictCommunication()">Categorize Message</button>
+    <p id="communication_result"></p>
+
+    <h2>Route Optimization</h2>
+    <input type="number" id="distance_km" placeholder="Distance (km)">
+    <input type="number" id="traffic_density" placeholder="Traffic Density">
+    <input type="number" id="weather_impact" placeholder="Weather Impact">
+    <button onclick="predictRoute()">Predict Delivery Time</button>
+    <p id="route_result"></p>
+
+    <script>
+        function predictDemand() {
+            const data = {
+                historical_sales: parseFloat(document.getElementById('historical_sales').value),
+                promotional_effect: parseFloat(document.getElementById('promotional_effect').value),
+                economic_indicator: parseFloat(document.getElementById('economic_indicator').value)
+            };
+            axios.post('/predict/demand', data)
+                .then(response => {
+                    document.getElementById('demand_result').innerText = `Predicted Demand: ${response.data.predicted_demand.toFixed(2)}`;
+                });
+        }
+
+        function predictCommunication() {
+            const data = {
+                text: document.getElementById('customer_text').value
+            };
+            axios.post('/predict/communication', data)
+                .then(response => {
+                    document.getElementById('communication_result').innerText = `Predicted Category: ${response.data.predicted_category}`;
+                });
+        }
+
+        function predictRoute() {
+            const data = {
+                distance_km: parseFloat(document.getElementById('distance_km').value),
+                traffic_density: parseFloat(document.getElementById('traffic_density').value),
+                weather_impact: parseFloat(document.getElementById('weather_impact').value)
+            };
+            axios.post('/predict/route', data)
+                .then(response => {
+                    document.getElementById('route_result').innerText = `Predicted Delivery Time: ${response.data.predicted_delivery_time.toFixed(2)} minutes`;
+                });
+        }
+    </script>
+</body>
+</html>
